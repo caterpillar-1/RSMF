@@ -1,0 +1,11 @@
+*.*
+*
+!*/
+/target
+/conf
+/csdk
+build/
+!.gitignore
+!*.rs
+!/Cargo.toml
+!/Cargo.lock
