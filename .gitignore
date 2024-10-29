@@ -6,7 +6,10 @@
 /csdk
 build/
 !.gitignore
+!/Makefile
 !*.rs
 !*.sol
 !/Cargo.toml
 !/Cargo.lock
+!/README.md
+!/LICENSE
