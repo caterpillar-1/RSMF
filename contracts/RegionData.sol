@@ -33,6 +33,7 @@ contract RegionData {
             numberOfOwner += 1;
             isOwner[newOwner] = true;
         }
+        return rc;
     }
 
     function remove(address owner) public onlyAdministration returns (bool rc) {
@@ -41,5 +42,6 @@ contract RegionData {
             numberOfOwner -= 1;
             isOwner[owner] = false;
         }
+        return rc;
     }
 }

@@ -1,5 +1,4 @@
 use alloy::primitives::Address;
-use anyhow::Error;
 use clap::{Parser, Subcommand};
 use lazy_static::lazy_static;
 use rsmf::bcos::*;
@@ -78,7 +77,7 @@ fn main() {
                 property_manager,
                 owners_file,
             } => {
-                assert!(!config.regions.contains_key(&cli.name));
+                // assert!(!config.regions.contains_key(&cli.name));
                 let mut region = Region::new(&mut session, property_manager);
                 if let Some(path) = owners_file {
                     let mut csv_reader = csv::Reader::from_path(path).unwrap();

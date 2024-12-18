@@ -18,9 +18,12 @@ contract Fund is inRegion {
     function propose(
         string memory name,
         bytes memory signature,
+        string memory url,
         uint amount
     ) public onlyRelevant returns (Proposal p) {
-        p = new Proposal(name, msg.sender, signature, amount, regionData);
-        proposals[numberOfProposals++] = p;
+        p = new Proposal(name, msg.sender, signature, url, amount, regionData);
+        proposals.push(p);
+        numberOfProposals ++;
+        return p;
     }
 }

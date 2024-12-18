@@ -102,11 +102,11 @@ fn check_config(config: &mut Config) -> Result<()> {
         config.keypair = Some(generate_keypair(&mut rand::thread_rng()))
     }
 
-    if config.token.is_none() {
-        config.token = Some(rpassword::prompt_password(
-            "Token (to login community server): ",
-        )?)
-    }
+    // if config.token.is_none() {
+    //     config.token = Some(rpassword::prompt_password(
+    //         "Token (to login community server): ",
+    //     )?)
+    // }
 
     Ok(())
 }
@@ -145,16 +145,16 @@ fn main() -> Result<()> {
             let digest = secp256k1::hashes::sha256::Hash::hash(&buf);
             let message = Message::from_digest(digest.to_byte_array());
             let signature = config.keypair.unwrap().0.sign_ecdsa(message);
-            println!(
-                "File signature signed by your private key: '{}'.",
-                signature
-            );
+            // println!(
+            //     "File signature signed by your private key: '{}'.",
+            //     signature
+            // );
             let base = server.join(&session.address().to_string())?;
             let file_url = base.join(filename.file_name().unwrap().to_str().unwrap())?;
-            let key_url = base.join(".bin")?;
+            // let key_url = base.join(".bin")?;
             client
                 .put(file_url.clone())
-                .bearer_auth(config.token.as_ref().unwrap())
+            //     .bearer_auth(config.token.as_ref().unwrap())
                 .body(buf)
                 .send()?;
             println!(
@@ -163,15 +163,15 @@ fn main() -> Result<()> {
                 file_url
             );
 
-            client
-                .put(key_url.clone())
-                .bearer_auth(config.token.as_ref().unwrap())
-                .body(config.keypair.unwrap().1.to_string())
-                .send()?;
-            println!(
-                "Your public key has been uploaded to the community server successfully at {}.",
-                key_url
-            );
+            // client
+            //     .put(key_url.clone())
+            //     .bearer_auth(config.token.as_ref().unwrap())
+            //     .body(config.keypair.unwrap().1.to_string())
+            //     .send()?;
+            // println!(
+            //     "Your public key has been uploaded to the community server successfully at {}.",
+            //     key_url
+            // );
             let address = fund.propose(&mut session, &name, &signature.to_string(), amount);
             println!(
                 "New proposal has been created at {} on blockchain.",
@@ -180,14 +180,14 @@ fn main() -> Result<()> {
         }
         Command::Download { address } => {
             let mut proposal = Proposal::from(address);
-            let name = proposal.name(&mut session);
-            let proposer = proposal.proposer(&mut session);
+            // let name = proposal.name(&mut session);
+            // let proposer = proposal.proposer(&mut session);
             let file_url: Url = proposal.url(&mut session).parse()?;
             let mut file_path: PathBuf = dirs::download_dir().unwrap();
             file_path.push(file_url.path_segments().into_iter().last().unwrap().collect::<String>());
-            let key_url = server.join(&proposer.to_string())?.join("public_key.bin")?;
+            // let key_url = server.join(&proposer.to_string())?.join("public_key.bin")?;
             let mut file_content = Vec::new();
-            let mut public_key_content = String::new();
+            // let mut public_key_content = String::new();
             client.get(file_url)
                 .bearer_auth(config.token.as_ref().unwrap())
                 .send()?.read_to_end(&mut file_content)?;
@@ -195,17 +195,17 @@ fn main() -> Result<()> {
             file.write_all(&mut file_content)?;
             drop(file);
             println!("Document saved in '{}'.", file_path.display());
-            client.get(key_url)
-                .bearer_auth(config.token.as_ref().unwrap())
-                .send()?.read_to_string(&mut public_key_content)?;
-            let public_key: PublicKey = public_key_content.parse()?;
-            let digest = secp256k1::hashes::sha256::Hash::hash(&file_content);
-            let message = Message::from_digest(digest.to_byte_array());
-            let signature: Signature = proposal.signature(&mut session).parse()?;
-            match signature.verify(&message, &public_key) {
-                Ok(_) => println!("The document PASSES verification."),
-                Err(_) => println!("The document FAILED verification and you should check with the proposer.")
-            }
+            // client.get(key_url)
+            //     .bearer_auth(config.token.as_ref().unwrap())
+            //     .send()?.read_to_string(&mut public_key_content)?;
+            // let public_key: PublicKey = public_key_content.parse()?;
+            // let digest = secp256k1::hashes::sha256::Hash::hash(&file_content);
+            // let message = Message::from_digest(digest.to_byte_array());
+            // let signature: Signature = proposal.signature(&mut session).parse()?;
+            // match signature.verify(&message, &public_key) {
+            //     Ok(_) => println!("The document PASSES verification."),
+            //     Err(_) => println!("The document FAILED verification and you should check with the proposer.")
+            // }
         }
         Command::Vote { address, choice } => {
             let proposal = Proposal::from(address);

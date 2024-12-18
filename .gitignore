@@ -2,8 +2,6 @@
 *
 !*/
 /target
-/conf
-/csdk
 build/
 !.gitignore
 !/Makefile
