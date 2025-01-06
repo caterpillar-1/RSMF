@@ -24,10 +24,17 @@
     - 区块链结点: 业委会集群, 物业集群, 房管局集群, (可选)业主自建结点;
     - 文件服务器: 业委会搭建
 - 数据
-    - 小区业主在链上的地址
+    - ⼩区描述数据：业主成员，所属房管局，物业，业委会的链上地址
+    - 提案⽂件及其签名
 - 合约
     
     ![contracts](./assets/images/contracts.svg)
+
+    合约源代码见 [contracts](./contracts/)
+
+- 网络
+
+    ![network](./assets/images/network.svg)
 
 ### 流程
 
